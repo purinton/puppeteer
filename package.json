@@ -2,7 +2,7 @@
     "name": "@purinton/puppeteer",
     "type": "module",
     "version": "1.0.0",
-    "description": "A Model Context Protocol (MCP) server template for building AI and automation tool APIs.",
+    "description": "A Puppeteer-powered MCP server for advanced web scraping and extraction tools, easily extendable for AI and automation workflows.",
     "main": "puppeteer.mjs",
     "scripts": {
         "start": "node puppeteer.mjs",
@@ -14,6 +14,10 @@
     },
     "keywords": [
         "puppeteer",
+        "web scraping",
+        "automation",
+        "mcp-server",
+        "ai-tools",
         "nodejs"
     ],
     "author": "Russell Purinton <russell@purinton.us>",
