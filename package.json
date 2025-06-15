@@ -5,6 +5,7 @@
     "description": "A Model Context Protocol (MCP) server template for building AI and automation tool APIs.",
     "main": "puppeteer.mjs",
     "scripts": {
+        "start": "node mcp-server-template.mjs",
         "test": "npx --node-options=\"--experimental-vm-modules --no-warnings\" jest --detectOpenHandles --silent"
     },
     "repository": {
