@@ -28,11 +28,16 @@ if (!fs.existsSync(toolsDir)) {
     process.exit(1);
 }
 
+// Define the authentication callback function
+const authCallback = (bearerToken) => {
+    return bearerToken === token;
+};
+
 // Import and start the MCP server
 import { mcpServer } from '@purinton/mcp-server';
 
 try {
-    await mcpServer({ name, version, port, token, toolsDir, log });
+    await mcpServer({ name, version, port, token, toolsDir, log, authCallback });
     log.info('Ready', { name, version, port });
 } catch (err) {
     log.error('Failed to start MCP server', { error: err });
