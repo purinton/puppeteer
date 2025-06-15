@@ -10,7 +10,7 @@ registerSignals({ log });
 // Resolve the path to package.json and load metadata
 const packagePath = path(import.meta, 'package.json');
 const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
-const name = packageJson.name || 'mcp-server-template';
+const name = packageJson.name || 'puppeteer';
 const version = packageJson.version || '1.0.0';
 
 // Load and validate environment variables

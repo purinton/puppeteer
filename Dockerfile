@@ -26,4 +26,4 @@ EXPOSE 1234
 ENV MCP_PORT=1234
 
 # Start the MCP server
-CMD ["node", "mcp-server-template.mjs"]
+CMD ["node", "puppeteer.mjs"]
