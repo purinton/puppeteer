@@ -32,9 +32,9 @@ This project is an MCP server built on [`@purinton/mcp-server`](https://www.npmj
 
 Below is a list of tools provided by this MCP server. Each tool can be called via the MCP protocol or HTTP API.
 
-### puppeteer_puppeteer
+### puppeteer
 
-**Name:** `puppeteer_puppeteer`  
+**Name:** `puppeteer`  
 **Description:** Extract text or JSON from a web page with advanced options (uses Puppeteer under the hood).
 
 **Input Schema:**
@@ -63,7 +63,7 @@ Below is a list of tools provided by this MCP server. Each tool can be called vi
 
 ```json
 {
-  "tool": "puppeteer_puppeteer",
+  "tool": "puppeteer",
   "args": {
     "url": "https://example.com",
     "selector": "h1"
