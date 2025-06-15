@@ -2,7 +2,7 @@
 
 ## @purinton/puppeteer [![npm version](https://img.shields.io/npm/v/@purinton/puppeteer.svg)](https://www.npmjs.com/package/@purinton/puppeteer)[![license](https://img.shields.io/github/license/purinton/puppeteer.svg)](LICENSE)[![build status](https://github.com/purinton/puppeteer/actions/workflows/nodejs.yml/badge.svg)](https://github.com/purinton/puppeteer/actions)
 
-> A Model Context Protocol (MCP) server providing a set of custom tools for AI and automation workflows. Easily extendable with your own tools.
+> A Model Context Protocol (MCP) server providing advanced web scraping and extraction tools powered by Puppeteer. Easily extendable with your own tools.
 
 ---
 
@@ -18,11 +18,12 @@
 
 ## Overview
 
-This project is an MCP server built on [`@purinton/mcp-server`](https://www.npmjs.com/package/@purinton/mcp-server) [![npm version](https://img.shields.io/npm/v/@purinton/mcp-server.svg)](https://www.npmjs.com/package/@purinton/mcp-server). It exposes a set of tools via the Model Context Protocol, making them accessible to AI agents and automation clients.
+This project is an MCP server built on [`@purinton/mcp-server`](https://www.npmjs.com/package/@purinton/mcp-server) [![npm version](https://img.shields.io/npm/v/@purinton/mcp-server.svg)](https://www.npmjs.com/package/@purinton/mcp-server). It exposes a set of Puppeteer-powered tools via the Model Context Protocol, making them accessible to AI agents and automation clients.
 
 **Key Features:**
 
 - Dynamic tool loading from the `tools/` directory
+- Advanced web scraping and extraction using Puppeteer
 - Simple to add or modify tools
 - HTTP API with authentication
 - Built for easy extension
@@ -31,23 +32,42 @@ This project is an MCP server built on [`@purinton/mcp-server`](https://www.npmj
 
 Below is a list of tools provided by this MCP server. Each tool can be called via the MCP protocol or HTTP API.
 
-### Example: Echo Tool
+### puppeteer_puppeteer
 
-**Name:** `echo`  
-**Description:** Returns the text you send it.
+**Name:** `puppeteer_puppeteer`  
+**Description:** Extract text or JSON from a web page with advanced options (uses Puppeteer under the hood).
 
 **Input Schema:**
 
 ```json
-{ "echoText": "string" }
+{
+  "url": "string",
+  "method": "string (optional, default: GET)",
+  "headers": "object (optional)",
+  "userAgent": "string (optional)",
+  "body": "string (optional)",
+  "timeout": "number (optional)",
+  "selector": "string (optional)",
+  "waitForSelector": "string (optional)",
+  "cookies": "array (optional)",
+  "followRedirects": "boolean (optional)",
+  "includeHeaders": "boolean (optional)",
+  "includeStatus": "boolean (optional)",
+  "disableJavaScript": "boolean (optional)",
+  "viewport": "object (optional, { width: number, height: number })",
+  "ignoreSSLErrors": "boolean (optional)"
+}
 ```
 
 **Example Request:**
 
 ```json
 {
-  "tool": "echo",
-  "args": { "echoText": "Hello, world!" }
+  "tool": "puppeteer_puppeteer",
+  "args": {
+    "url": "https://example.com",
+    "selector": "h1"
+  }
 }
 ```
 
@@ -55,8 +75,8 @@ Below is a list of tools provided by this MCP server. Each tool can be called vi
 
 ```json
 {
-  "message": "echo-reply",
-  "data": { "text": "Hello, world!" }
+  "url": "https://example.com",
+  "text": "Example Domain"
 }
 ```
 
@@ -75,7 +95,7 @@ Document: tool name, description, input schema, example request/response.
 
 2. **Configure environment variables:**
    - `MCP_PORT`: (optional) Port to run the server (default: 1234)
-   - `MCP_TOKEN`: (optional) Bearer token for authentication
+   - `MCP_TOKEN`: (required) Bearer token for authentication
 
 3. **Start the server:**
 
