@@ -6,8 +6,8 @@ StartLimitBurst=3
 StartLimitIntervalSec=60
 
 [Service]
-User=root
-Group=root
+User=puppeteer
+Group=puppeteer
 RestartSec=5
 Restart=on-failure
 WorkingDirectory=/opt/puppeteer
