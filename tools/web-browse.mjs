@@ -33,7 +33,7 @@ export default async function ({ mcpServer, toolName, log }) {
                             }
                         });
                     }
-                    let navOptions = { waitUntil: 'domcontentloaded', timeout: timeout || 10000 };
+                    let navOptions = { waitUntil: 'domcontentloaded', timeout: 10000 };
                     let navigationError = null;
                     try {
                         await page.goto(url, navOptions);
@@ -41,7 +41,7 @@ export default async function ({ mcpServer, toolName, log }) {
                         navigationError = err;
                         if (err.name === 'TimeoutError') {
                             navOptions.waitUntil = 'networkidle0';
-                            navOptions.timeout = timeout || 10000;
+                            navOptions.timeout = 10000;
                             try {
                                 await page.goto(url, navOptions);
                                 navigationError = null;
@@ -53,11 +53,7 @@ export default async function ({ mcpServer, toolName, log }) {
                     if (navigationError) {
                         throw new Error(`Navigation failed: ${navigationError.message}`);
                     }
-                    if (waitForSelector) {
-                        await page.waitForSelector(waitForSelector, { timeout: timeout || 5000 });
-                    } else {
-                        await page.waitForSelector('body', { timeout: timeout || 5000 });
-                    }
+                    await page.waitForSelector('body', { timeout: 5000 });
                     const mainResponse = await page.waitForResponse(resp => resp.url() === url && resp.request().isNavigationRequest(), { timeout: 5000 }).catch(() => null);
                     let contentType = '';
                     let jsonData = null;
@@ -74,41 +70,29 @@ export default async function ({ mcpServer, toolName, log }) {
                         }
                     }
                     let result = { url };
-                    if (includeStatus && status !== null) result.status = status;
-                    if (includeHeaders && respHeaders) result.headers = respHeaders;
                     if (jsonData) {
                         result.content = await mainResponse.text();
                     } else {
-                        if (selector) {
-                            result.text = await page.$eval(selector, el => el.innerText);
-                        } else {
-                            result.text = await page.evaluate(() => {
-                                function getVisibleText(node) {
-                                    if (node.nodeType === Node.TEXT_NODE) {
-                                        return node.textContent.trim();
-                                    }
-                                    if (node.nodeType !== Node.ELEMENT_NODE) return '';
-                                    const style = window.getComputedStyle(node);
-                                    if (style && (style.display === 'none' || style.visibility === 'hidden')) return '';
-                                    let txt = '';
-                                    for (const child of node.childNodes) {
-                                        txt += getVisibleText(child) + ' ';
-                                    }
-                                    return txt.trim();
+                        result.text = await page.evaluate(() => {
+                            function getVisibleText(node) {
+                                if (node.nodeType === Node.TEXT_NODE) {
+                                    return node.textContent.trim();
                                 }
-                                return getVisibleText(document.body);
-                            });
-                        }
-                    }
-                    if (followRedirects === false && mainResponse) {
-                        result.finalUrl = mainResponse.url();
+                                if (node.nodeType !== Node.ELEMENT_NODE) return '';
+                                const style = window.getComputedStyle(node);
+                                if (style && (style.display === 'none' || style.visibility === 'hidden')) return '';
+                                let txt = '';
+                                for (const child of node.childNodes) {
+                                    txt += getVisibleText(child) + ' ';
+                                }
+                                return txt.trim();
+                            }
+                            return getVisibleText(document.body);
+                        });
                     }
                     return result;
                 } finally {
                     await page.close();
-                    if (ignoreSSLErrors) {
-                        delete process.env.NODE_TLS_REJECT_UNAUTHORIZED;
-                    }
                 }
             });
             log.debug(`${toolName} Response`, { response });
