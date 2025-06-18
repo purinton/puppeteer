@@ -112,25 +112,25 @@ To add a new tool:
 
 1. **Create a new file in the `tools/` directory** (e.g., `tools/mytool.mjs`):
 
-   ```js
-   import { z, buildResponse } from '@purinton/mcp-server';
+  ```js
+  import { z, buildResponse } from '@purinton/mcp-server';
+  export default async function ({ mcpServer, toolName, log }) {
+    mcpServer.tool(
+      toolName,
+      "Write a brief description of your tool here",
+      { echoText: z.string() },
+      async (_args,_extra) => {
+        log.debug(`${toolName} Request`, { _args });
+        const response = 'Hello World!';
+        log.debug(`${toolName} Response`, { response });
+        return buildResponse(response);
+      }
+    );
+  }
+  ```
 
-   export default async function (server, toolName = 'mytool') {
-     server.tool(
-       toolName,
-       "Describe what your tool does here.",
-       { inputParam: z.string() }, // Define your input schema
-       async (_args, _extra) => {
-         // Your tool logic here
-         return buildResponse({ message: "mytool-reply", data: { result: "..." } });
-       }
-     );
-   }
-   ```
-
-2. **Document your tool** in the [Available Tools](#available-tools) section above.
-
-3. **Restart the server** to load new tools.
+1. **Document your tool** in the [Available Tools](#available-tools) section above.
+2. **Restart the server** to load new tools.
 
 You can add as many tools as you like. Each tool is a self-contained module.
 
