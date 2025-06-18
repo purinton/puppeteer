@@ -8,58 +8,15 @@ export default async function ({ mcpServer, toolName, log }) {
             url: z.string(),
             method: z.string().optional().default('GET'),
             headers: z.record(z.string()).optional(),
-            userAgent: z.string().optional(),
-            body: z.string().optional(),
-            timeout: z.number().optional(),
-            selector: z.string().optional(),
-            waitForSelector: z.string().optional(),
-            cookies: z.array(z.record(z.any())).optional(),
-            followRedirects: z.boolean().optional(),
-            includeHeaders: z.boolean().optional(),
-            includeStatus: z.boolean().optional(),
-            disableJavaScript: z.boolean().optional(),
-            viewport: z.object({ width: z.number(), height: z.number() }).optional(),
-            ignoreSSLErrors: z.boolean().optional(),
+            body: z.string().optional()
         },
         async (_args, _extra) => {
             log.debug(`${toolName} Request`, { _args });
-            const {
-                url, method, headers, userAgent, body, timeout, selector, waitForSelector,
-                cookies, followRedirects, includeHeaders, includeStatus, disableJavaScript,
-                proxy, viewport, ignoreSSLErrors
-            } = _args;
+            const { url, method, headers, body } = _args;
             const response = await pool.run(async (browser) => {
                 let page;
                 let context = browser.defaultBrowserContext();
-                if (ignoreSSLErrors) {
-                    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-                }
                 page = await browser.newPage();
-                if (viewport) {
-                    await page.setViewport(viewport);
-                }
-                if (userAgent) {
-                    await page.setUserAgent(userAgent);
-                } else {
-                    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36');
-                }
-                if (disableJavaScript) {
-                    await page.setJavaScriptEnabled(false);
-                } else {
-                    await page.setJavaScriptEnabled(true);
-                }
-                if (cookies && cookies.length > 0) {
-                    await page.setCookie(...cookies);
-                } else {
-                    await page.setCookie({
-                        name: 'puppeteer_session',
-                        value: 'enabled',
-                        domain: new URL(url).hostname,
-                        path: '/',
-                        httpOnly: false,
-                        secure: false,
-                    });
-                }
                 try {
                     const needsInterception = (method && method !== 'GET') || headers || body;
                     if (needsInterception) {
@@ -76,7 +33,7 @@ export default async function ({ mcpServer, toolName, log }) {
                             }
                         });
                     }
-                    let navOptions = { waitUntil: 'domcontentloaded', timeout: timeout || 20000 };
+                    let navOptions = { waitUntil: 'domcontentloaded', timeout: timeout || 10000 };
                     let navigationError = null;
                     try {
                         await page.goto(url, navOptions);
@@ -84,7 +41,7 @@ export default async function ({ mcpServer, toolName, log }) {
                         navigationError = err;
                         if (err.name === 'TimeoutError') {
                             navOptions.waitUntil = 'networkidle0';
-                            navOptions.timeout = timeout || 60000;
+                            navOptions.timeout = timeout || 10000;
                             try {
                                 await page.goto(url, navOptions);
                                 navigationError = null;
