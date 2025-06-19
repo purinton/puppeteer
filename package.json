@@ -1,7 +1,7 @@
 {
     "name": "@purinton/puppeteer",
     "type": "module",
-    "version": "1.0.10",
+    "version": "1.0.11",
     "description": "A Puppeteer-powered MCP server for advanced web scraping and extraction tools, easily extendable for AI and automation workflows.",
     "main": "puppeteer.mjs",
     "scripts": {
@@ -27,7 +27,7 @@
     },
     "homepage": "https://github.com/purinton/puppeteer#readme",
     "devDependencies": {
-        "jest": "^30.0.0"
+        "jest": "^30.0.1"
     },
     "jest": {
         "testEnvironment": "node",
@@ -40,7 +40,7 @@
     "dependencies": {
         "puppeteer": "^24.10.1",
         "@purinton/common": "^1.0.16",
-        "@purinton/mcp-server": "^1.0.19",
+        "@purinton/mcp-server": "^1.0.20",
         "dotenv": "^16.5.0"
     }
 }
