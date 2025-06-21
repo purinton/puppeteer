@@ -27,7 +27,7 @@
     },
     "homepage": "https://github.com/purinton/puppeteer#readme",
     "devDependencies": {
-        "jest": "^30.0.1"
+        "jest": "^30.0.2"
     },
     "jest": {
         "testEnvironment": "node",
