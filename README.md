@@ -208,5 +208,7 @@ For help, questions, or to chat with the author and community, visit:
 ## Links
 
 - [@purinton/mcp-server on npm](https://www.npmjs.com/package/@purinton/mcp-server)
-- [GitHub](https://github.com/purinton/mcp-server)
+- [GitHub Repo](https://github.com/purinton/mcp-server)
+- [GitHub Org](https://github.com/purinton)
+- [GitHub Personal](https://github.com/rpurinton)
 - [Discord](https://discord.gg/QSBxQnX7PF)
