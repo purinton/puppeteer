@@ -75,15 +75,25 @@ export default async function ({ mcpServer, toolName, log }) {
                     } else {
                         result.text = await page.evaluate(() => {
                             function getVisibleText(node) {
+                                // Skip script, style, noscript, and template tags
+                                if (
+                                    node.nodeType === Node.ELEMENT_NODE &&
+                                    ['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEMPLATE', 'HEAD'].includes(node.nodeName)
+                                ) {
+                                    return '';
+                                }
                                 if (node.nodeType === Node.TEXT_NODE) {
-                                    return node.textContent.trim();
+                                    // Only return text if not just whitespace
+                                    const text = node.textContent.trim();
+                                    return text.length > 0 ? text : '';
                                 }
                                 if (node.nodeType !== Node.ELEMENT_NODE) return '';
                                 const style = window.getComputedStyle(node);
                                 if (style && (style.display === 'none' || style.visibility === 'hidden')) return '';
                                 let txt = '';
                                 for (const child of node.childNodes) {
-                                    txt += getVisibleText(child) + ' ';
+                                    const childText = getVisibleText(child);
+                                    if (childText) txt += childText + ' ';
                                 }
                                 return txt.trim();
                             }
