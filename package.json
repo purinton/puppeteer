@@ -1,7 +1,7 @@
 {
     "name": "@purinton/puppeteer",
     "type": "module",
-    "version": "1.0.13",
+    "version": "1.0.14",
     "description": "A Puppeteer-powered MCP server for advanced web scraping and extraction tools, easily extendable for AI and automation workflows.",
     "main": "puppeteer.mjs",
     "scripts": {
